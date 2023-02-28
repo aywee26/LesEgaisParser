@@ -8,7 +8,7 @@ namespace LesEgaisParser
         static void Main(string[] args)
         {
             var httpClient = new HttpClientDemo();
-            Console.WriteLine($"Total number of deals: httpClient.RequestTotalNumberOfDeals()");
+            Console.WriteLine($"Total number of deals: {httpClient.RequestTotalNumberOfDeals()}");
             var dealsDto = httpClient.RequestSpecialReportWoodDeal(page: 1);
             var mapper = new WoodDealMapper();
             var deals = mapper.GetWoodDeals(dealsDto);
