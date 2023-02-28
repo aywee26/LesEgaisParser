@@ -72,9 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpClientDemo.cs" />
+    <Compile Include="Mapping\WoodDealMapper.cs" />
+    <Compile Include="Models\WoodDeal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchReportWoodDealCount.cs" />
+    <Compile Include="DataTransferObjects\SearchReportWoodDeal.cs" />
+    <Compile Include="DataTransferObjects\SearchReportWoodDealCount.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
