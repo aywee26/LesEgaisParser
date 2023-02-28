@@ -65,8 +65,10 @@ namespace LesEgaisParser.Mapping
                     var digitFromInn = (int)(char.GetNumericValue(inn[i]));
                     sum += digitFromInn * controlDigits[i];
                 }
+
                 var result = sum % 11 % 10;
-                return result == inn[inn.Length - 1];
+                var check = (int)(char.GetNumericValue(inn[inn.Length - 1]));
+                return result == check;
             }
 
             if (inn.Length == 12)
@@ -80,10 +82,13 @@ namespace LesEgaisParser.Mapping
                     sum1 += digitFromInn * controlDigits[i + 1];
                     sum2 += digitFromInn * controlDigits[i];
                 }
-                var result1 = sum1 % 11 % 10;
-                var result2 = sum2 % 11 % 10;
 
-                return (result1 == inn[inn.Length - 2] && result2 == inn[inn.Length - 1]);
+                var result1 = sum1 % 11 % 10;
+                var check1 = (int)(char.GetNumericValue(inn[inn.Length - 2]));
+                var result2 = sum2 % 11 % 10;
+                var check2 = (int)(char.GetNumericValue(inn[inn.Length - 1]));
+
+                return (result1 == check1 && result2 == check2);
             }
 
             return false;

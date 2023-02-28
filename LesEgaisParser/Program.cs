@@ -1,5 +1,6 @@
 ﻿using LesEgaisParser.Mapping;
 using System;
+using System.Configuration;
 
 namespace LesEgaisParser
 {
@@ -7,8 +8,13 @@ namespace LesEgaisParser
     {
         static void Main(string[] args)
         {
-            var httpClient = new HttpClientDemo();
+            var numbersOfDeals = int.Parse(ConfigurationManager.AppSettings["NumberOfDealsPerRequest"]);
+            var requestDelay = int.Parse(ConfigurationManager.AppSettings["RequestDelay"]);
+
+            var httpClient = new HttpClientDemo(numbersOfDeals, requestDelay);
+
             Console.WriteLine($"Total number of deals: {httpClient.RequestTotalNumberOfDeals()}");
+
             var dealsDto = httpClient.RequestSpecialReportWoodDeal(page: 1);
             var mapper = new WoodDealMapper();
             var deals = mapper.GetWoodDeals(dealsDto);
