@@ -10,6 +10,8 @@ namespace LesEgaisParser
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(new HttpClientDemo().RequestTotalNumberOfDeals());
+            Console.ReadLine();
         }
     }
 }
