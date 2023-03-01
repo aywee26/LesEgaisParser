@@ -25,7 +25,7 @@ namespace LesEgaisParser.DataTransferObjects
             public string buyerInn { get; set; }
             public decimal woodVolumeBuyer { get; set; }
             public decimal woodVolumeSeller { get; set; }
-            public DateTime dealDate { get; set; }
+            public DateTime? dealDate { get; set; }
             public string dealNumber { get; set; }
             public string __typename { get; set; }
         }

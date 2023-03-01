@@ -15,6 +15,23 @@ namespace LesEgaisParser.Database
             _connectionString = connectionString;
         }
 
+        public void TestConnectionToDb()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not connect to DB!");
+                    Console.WriteLine(ex.Message);
+                    throw;
+                }
+            }
+        }
+
         public void OutputWoodDealsToConsole()
         {
             using (var connection = new SqlConnection(_connectionString))

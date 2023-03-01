@@ -1,5 +1,6 @@
 ﻿using LesEgaisParser.DataTransferObjects;
 using LesEgaisParser.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -27,7 +28,7 @@ namespace LesEgaisParser.Mapping
                         SellerInn = deal.sellerInn,
                         BuyerName = deal.buyerName,
                         BuyerInn = deal.buyerInn,
-                        DealDate = deal.dealDate,
+                        DealDate = deal.dealDate ?? DateTime.MinValue,
                         WoodVolumeBuyer = deal.woodVolumeBuyer,
                         WoodVolumeSeller = deal.woodVolumeSeller
                     };

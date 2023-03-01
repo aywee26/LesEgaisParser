@@ -16,6 +16,10 @@ namespace LesEgaisParser
             var requestDelaySeconds = int.Parse(ConfigurationManager.AppSettings["DelayBetweenRequestsSeconds"]);
             var requestDelay = TimeSpan.FromSeconds(requestDelaySeconds);
 
+            Console.WriteLine("Testing connection to DB...");
+            var dbWorker = new DatabaseWorker(connectionString);
+            dbWorker.TestConnectionToDb();
+
             Console.WriteLine("Starting HttpClient...");
             var httpClient = new HttpClientAdapter(numbersOfDeals);
 
@@ -27,7 +31,6 @@ namespace LesEgaisParser
             Console.WriteLine();
 
             var mapper = new WoodDealMapper();
-            var dbWorker = new DatabaseWorker(connectionString);
 
             var skippedPages = new List<int>();
 
