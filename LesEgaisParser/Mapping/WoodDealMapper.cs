@@ -2,6 +2,7 @@
 using LesEgaisParser.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace LesEgaisParser.Mapping
 {
@@ -9,8 +10,8 @@ namespace LesEgaisParser.Mapping
     {
         public List<WoodDeal> GetWoodDeals(SearchReportWoodDeal dealsDto)
         {
-            var woodDeals = new List<WoodDeal>();
             var dealsContent = dealsDto.data.searchReportWoodDeal.content;
+            var woodDeals = new List<WoodDeal>(dealsContent.Length);
             foreach (var deal in dealsContent)
             {
                 if (IsDealNumberCorrect(deal.dealNumber)
