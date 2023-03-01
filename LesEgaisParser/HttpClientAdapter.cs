@@ -5,14 +5,14 @@ using System.Text.Json;
 
 namespace LesEgaisParser
 {
-    public class HttpClientDemo
+    public class HttpClientAdapter
     {
         private static readonly HttpClient _httpClient = new HttpClient();
         private const string _requestUrl = @"https://www.lesegais.ru/open-area/graphql";
         private readonly int _numberOfDealsPerRequest;
         private readonly int _requestDelay;
         
-        public HttpClientDemo(int numberOfDealsPerRequest, int requestDelay)
+        public HttpClientAdapter(int numberOfDealsPerRequest, int requestDelay)
         {
             _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
             _httpClient.DefaultRequestHeaders.Add("Referer", @"https://www.lesegais.ru/open-area/deal");

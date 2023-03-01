@@ -1,10 +1,8 @@
 ﻿using LesEgaisParser.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Security.Cryptography;
 
 namespace LesEgaisParser.Database
 {
@@ -63,7 +61,7 @@ namespace LesEgaisParser.Database
                     {
                         var command = new SqlCommand(sqlExpression, connection);
                         command.CommandType = CommandType.StoredProcedure;
-                        InsertParameters(ref command, deal);
+                        InsertParameters(command, deal);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -74,7 +72,7 @@ namespace LesEgaisParser.Database
             }
         }
 
-        private void InsertParameters(ref SqlCommand command, WoodDeal deal)
+        private void InsertParameters(SqlCommand command, WoodDeal deal)
         {
             var dealNumberParam = new SqlParameter
             {

@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DatabaseWorker.cs" />
-    <Compile Include="HttpClientDemo.cs" />
+    <Compile Include="HttpClientAdapter.cs" />
     <Compile Include="Mapping\WoodDealMapper.cs" />
     <Compile Include="Models\WoodDeal.cs" />
     <Compile Include="Program.cs" />
