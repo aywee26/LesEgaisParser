@@ -12,12 +12,13 @@ namespace LesEgaisParser
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var dbWorker = new DatabaseWorker(connectionString);
+            Console.WriteLine("Before UpSert attempt:");
             dbWorker.OutputWoodDealsToConsole();
 
             var woodDealToInsert1 = new WoodDeal
             {
                 DealNumber = "0453000000000000000107017409",
-                BuyerName = "Физическое лицо",
+                BuyerName = "Псевдо Псевдо Физическое лицо",
                 BuyerInn = "",
                 SellerName = "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"ИНТЕРСТРОЙ\"",
                 SellerInn = "0107017409",
@@ -36,9 +37,25 @@ namespace LesEgaisParser
                 WoodVolumeBuyer = 0m,
                 WoodVolumeSeller = 0m
             };
+            var woodDealToInsert3 = new WoodDeal
+            {
+                DealNumber = "0004024004008184000240804862",
+                BuyerName = "ИП Хажипов Евгений Маратович",
+                BuyerInn = "024004008184",
+                SellerName = "ООО \"Газэнерго ОЙл\"",
+                SellerInn = "0240804862",
+                DealDate = DateTime.Parse("01.03.2023"),
+                WoodVolumeBuyer = 0m,
+                WoodVolumeSeller = 0m
+            };
 
-            dbWorker.InsertWoodDeals(new List<WoodDeal> { woodDealToInsert1, woodDealToInsert2 });
-            
+            dbWorker.UpsertWoodDeals(new List<WoodDeal> { woodDealToInsert1, woodDealToInsert2, woodDealToInsert3 });
+
+            Console.WriteLine("After UpSert attempt:");
+            dbWorker.OutputWoodDealsToConsole();
+            Console.ReadLine();
+
+
 
 
             //var numbersOfDeals = int.Parse(ConfigurationManager.AppSettings["NumberOfDealsPerRequest"]);

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace LesEgaisParser.Database
 {
@@ -47,6 +48,7 @@ namespace LesEgaisParser.Database
                 
             }
         }
+
 
         public void InsertWoodDeal(WoodDeal deal)
         {
@@ -109,6 +111,31 @@ namespace LesEgaisParser.Database
                     Console.WriteLine(ex.Message);
                 }
 
+            }
+        }
+
+        public void UpsertWoodDeals(List<WoodDeal> woodDeals)
+        {
+            const string sqlExpression = "sp_UpsertDeal";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                try
+                {
+                    foreach (var deal in woodDeals)
+                    {
+                        var command = new SqlCommand(sqlExpression, connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        InsertParameters(ref command, deal);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }                
             }
         }
 
