@@ -1,4 +1,7 @@
 ﻿using LesEgaisParser.Database;
+using LesEgaisParser.Models;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace LesEgaisParser
@@ -10,6 +13,32 @@ namespace LesEgaisParser
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var dbWorker = new DatabaseWorker(connectionString);
             dbWorker.OutputWoodDealsToConsole();
+
+            var woodDealToInsert1 = new WoodDeal
+            {
+                DealNumber = "0453000000000000000107017409",
+                BuyerName = "Физическое лицо",
+                BuyerInn = "",
+                SellerName = "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"ИНТЕРСТРОЙ\"",
+                SellerInn = "0107017409",
+                DealDate = DateTime.Parse("01.03.2023"),
+                WoodVolumeBuyer = 0m,
+                WoodVolumeSeller = 0m
+            };
+            var woodDealToInsert2 = new WoodDeal
+            {
+                DealNumber = "0029002310013042000107017409",
+                BuyerName = "МУНИЦИПАЛЬНОЕ УНИТАРНОЕ ПРЕДПРИЯТИЕ \"КРАСНОДАРСКОЕ ТРАМВАЙНО-ТРОЛЛЕЙБУСНОЕ УПРАВЛЕНИЕ\" МУНИЦИПАЛЬНОГО ОБРАЗОВАНИЯ ГОРОД КРАСНОДАР",
+                BuyerInn = "2310013042",
+                SellerName = "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"ИНТЕРСТРОЙ\"",
+                SellerInn = "0107017409",
+                DealDate = DateTime.Parse("01.03.2023"),
+                WoodVolumeBuyer = 0m,
+                WoodVolumeSeller = 0m
+            };
+
+            dbWorker.InsertWoodDeals(new List<WoodDeal> { woodDealToInsert1, woodDealToInsert2 });
+            
 
 
             //var numbersOfDeals = int.Parse(ConfigurationManager.AppSettings["NumberOfDealsPerRequest"]);

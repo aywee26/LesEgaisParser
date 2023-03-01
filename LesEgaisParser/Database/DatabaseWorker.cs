@@ -1,4 +1,8 @@
-﻿using System;
+﻿using LesEgaisParser.Models;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace LesEgaisParser.Database
@@ -17,8 +21,9 @@ namespace LesEgaisParser.Database
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string sqlExpression = "SELECT * FROM WoodDeals";
+                const string sqlExpression = "sp_GetDeals";
                 var command = new SqlCommand(sqlExpression, connection);
+                command.CommandType = CommandType.StoredProcedure;
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -41,6 +46,130 @@ namespace LesEgaisParser.Database
                 }
                 
             }
+        }
+
+        public void InsertWoodDeal(WoodDeal deal)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction();
+
+                const string sqlExpression = "sp_InsertDeal";
+                var command = new SqlCommand(sqlExpression, connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Transaction = transaction;
+
+                try
+                {
+                    InsertParameters(ref command, deal);
+
+                    var result = command.ExecuteScalar();
+                    transaction.Commit();
+                    Console.WriteLine(result);
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Insertion failed!");
+                    Console.WriteLine(ex.Message);
+                }
+
+
+            }
+        }
+
+        public void InsertWoodDeals(List<WoodDeal> woodDeals)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction();
+
+                const string sqlExpression = "sp_InsertDeal";
+
+                try
+                {
+                    foreach (var deal in woodDeals)
+                    {
+                        var command = new SqlCommand(sqlExpression, connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Transaction = transaction;
+                        InsertParameters(ref command, deal);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Insertion failed!");
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+        }
+
+        private void InsertParameters(ref SqlCommand command, WoodDeal deal)
+        {
+            var dealNumberParam = new SqlParameter
+            {
+                ParameterName = "@dealNumber",
+                Value = deal.DealNumber
+            };
+            command.Parameters.Add(dealNumberParam);
+
+            var sellerNameParam = new SqlParameter
+            {
+                ParameterName = "@sellerName",
+                Value = deal.SellerName
+            };
+            command.Parameters.Add(sellerNameParam);
+
+            var sellerInnParam = new SqlParameter
+            {
+                ParameterName = "@sellerInn",
+                Value = deal.SellerInn
+            };
+            command.Parameters.Add(sellerInnParam);
+
+            var buyerNameParam = new SqlParameter
+            {
+                ParameterName = "@buyerName",
+                Value = deal.BuyerName
+            };
+            command.Parameters.Add(buyerNameParam);
+
+            var buyerInnParam = new SqlParameter
+            {
+                ParameterName = "@buyerInn",
+                Value = deal.BuyerInn
+            };
+            command.Parameters.Add(buyerInnParam);
+
+            var dealDateParam = new SqlParameter
+            {
+                ParameterName = "@dealDate",
+                Value = deal.DealDate
+            };
+            command.Parameters.Add(dealDateParam);
+
+            var woodVolumeBuyerParam = new SqlParameter
+            {
+                ParameterName = "@woodVolumeBuyer",
+                Value = deal.WoodVolumeBuyer
+            };
+            command.Parameters.Add(woodVolumeBuyerParam);
+
+            var woodVolumeSellerParam = new SqlParameter
+            {
+                ParameterName = "@woodVolumeSeller",
+                Value = deal.WoodVolumeSeller
+
+            };
+            command.Parameters.Add(woodVolumeSellerParam);
         }
     }
 }
