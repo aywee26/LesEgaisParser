@@ -65,9 +65,16 @@ namespace LesEgaisParser.Parser
                 var deserializedContent = _mapper.GetWoodDeals(pageContent);
 
                 Console.WriteLine("Attempting to upsert data...");
-                _dbWorker.UpsertWoodDeals(deserializedContent);
-
-                Console.WriteLine("Success!\n");
+                try
+                {
+                    _dbWorker.UpsertWoodDeals(deserializedContent);
+                    Console.WriteLine("Success!\n");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Upserting failed!\n");
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 

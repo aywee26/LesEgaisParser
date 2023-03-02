@@ -17,26 +17,39 @@ namespace LesEgaisParser.Mapping
             {
                 if (IsNameCorrect(deal.sellerName)
                     && IsNameCorrect(deal.buyerName)
-                    && IsINNCorrect(deal.sellerInn)
-                    && IsINNCorrect(deal.buyerInn)
                     && IsDateCorrect(deal.dealDate)
-                    && IsDealNumberCorrect(deal.dealNumber, deal.buyerInn, deal.sellerInn))
+                    && IsDealNumberCorrect(deal.dealNumber))
                 {
                     var woodDeal = new WoodDeal()
                     {
                         DealNumber = deal.dealNumber,
                         SellerName = deal.sellerName,
-                        SellerInn = deal.sellerInn,
                         BuyerName = deal.buyerName,
-                        BuyerInn = deal.buyerInn,
                         DealDate = (DateTime)deal.dealDate,
                         WoodVolumeBuyer = deal.woodVolumeBuyer,
                         WoodVolumeSeller = deal.woodVolumeSeller
                     };
 
+                    if (IsINNCorrect(deal.buyerInn))
+                    {
+                        woodDeal.BuyerInn = deal.buyerInn;
+                    }
+                    else
+                    {
+                        woodDeal.BuyerInn = null;
+                    }
+
+                    if (IsINNCorrect(deal.sellerInn))
+                    {
+                        woodDeal.SellerInn = deal.sellerInn;
+                    }
+                    else
+                    {
+                        woodDeal.SellerInn = null;
+                    }
+
                     woodDeals.Add(woodDeal);
                 }
-
             }
 
             return woodDeals;            
@@ -51,13 +64,13 @@ namespace LesEgaisParser.Mapping
 
             if (inn == string.Empty)
             {
-                return true;
+                return false;
             }
 
             return IsINNControlSumCorrect(inn);
         }
 
-        private bool IsDealNumberCorrect(string dealNumber, string buyerInn, string sellerInn)
+        private bool IsDealNumberCorrect(string dealNumber)
         {
             if (string.IsNullOrEmpty(dealNumber))
                 return false;
@@ -68,39 +81,7 @@ namespace LesEgaisParser.Mapping
             if (!dealNumber.All(char.IsDigit))
                 return false;
 
-            // -----
-
-            var builder = new StringBuilder();
-
-            if (buyerInn.Length == 0)
-            {
-                builder.Append("000000000000");
-            }
-            else if (buyerInn.Length == 10)
-            {
-                builder.Append("00");
-                builder.Append(buyerInn);
-            }
-            else
-            {
-                builder.Append(buyerInn);
-            }
-
-            if (sellerInn.Length == 0)
-            {
-                builder.Append("000000000000");
-            }
-            else if (sellerInn.Length == 10)
-            {
-                builder.Append("00");
-                builder.Append(sellerInn);
-            }
-            else
-            {
-                builder.Append(sellerInn);
-            }
-
-            return (dealNumber.Substring(4) == builder.ToString());
+            return true;
         }
 
         private bool IsNameCorrect(string name)
@@ -154,12 +135,6 @@ namespace LesEgaisParser.Mapping
             {
                 return false;
             }
-
-            //var sqlLowerLimit = new DateTime(year: 1753, month: 01, day: 01);
-            //if (date < sqlLowerLimit)
-            //{
-            //    return false;
-            //}
 
             return true;
         }

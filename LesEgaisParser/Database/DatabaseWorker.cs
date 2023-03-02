@@ -57,7 +57,7 @@ namespace LesEgaisParser.Database
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    throw;
                 }                
             }
         }
