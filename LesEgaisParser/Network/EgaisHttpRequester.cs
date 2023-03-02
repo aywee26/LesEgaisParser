@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace LesEgaisParser
 {
-    public class HttpClientAdapter
+    public class EgaisHttpRequester
     {
         private static readonly HttpClient _httpClient = new HttpClient();
         private const string _requestUrl = @"https://www.lesegais.ru/open-area/graphql";
@@ -15,7 +15,7 @@ namespace LesEgaisParser
         private TimeSpan _requestDelay;
         private int _failedRequests = 0;
         
-        public HttpClientAdapter(int numberOfDealsPerRequest, TimeSpan requestDelay)
+        public EgaisHttpRequester(int numberOfDealsPerRequest, TimeSpan requestDelay)
         {
             _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
             _httpClient.DefaultRequestHeaders.Add("Referer", @"https://www.lesegais.ru/open-area/deal");

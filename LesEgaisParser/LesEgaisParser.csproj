@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DatabaseWorker.cs" />
-    <Compile Include="Network\HttpClientAdapter.cs" />
+    <Compile Include="Network\EgaisHttpRequester.cs" />
     <Compile Include="Mapping\WoodDealMapper.cs" />
     <Compile Include="Models\WoodDeal.cs" />
     <Compile Include="Parser\Parser.cs" />

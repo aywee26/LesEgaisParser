@@ -12,7 +12,7 @@ namespace LesEgaisParser.Parser
         private readonly TimeSpan _requestDelay;
         private readonly TimeSpan _delayBetweenParsing;
         private readonly DatabaseWorker _dbWorker;
-        private readonly HttpClientAdapter _httpClient;
+        private readonly EgaisHttpRequester _httpClient;
         private readonly WoodDealMapper _mapper;
 
         public ParserClass(string connectionString, int numberOfDealsPerPage, TimeSpan requestDelay, TimeSpan delayBetweenParsing)
@@ -23,7 +23,7 @@ namespace LesEgaisParser.Parser
             _delayBetweenParsing = delayBetweenParsing;
 
             _dbWorker = new DatabaseWorker(_connectionString);
-            _httpClient = new HttpClientAdapter(_numberOfDealsPerPage, _requestDelay);
+            _httpClient = new EgaisHttpRequester(_numberOfDealsPerPage, _requestDelay);
             _mapper = new WoodDealMapper();
         }
 
