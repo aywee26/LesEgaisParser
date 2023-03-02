@@ -113,11 +113,11 @@ namespace LesEgaisParser.Mapping
                 return false;
             }
 
-            var sqlLowerLimit = new DateTime(year: 1753, month: 01, day: 01);
-            if (date < sqlLowerLimit)
-            {
-                return false;
-            }
+            //var sqlLowerLimit = new DateTime(year: 1753, month: 01, day: 01);
+            //if (date < sqlLowerLimit)
+            //{
+            //    return false;
+            //}
 
             return true;
         }

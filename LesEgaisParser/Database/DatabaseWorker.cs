@@ -129,6 +129,7 @@ namespace LesEgaisParser.Database
             var dealDateParam = new SqlParameter
             {
                 ParameterName = "@dealDate",
+                SqlDbType = SqlDbType.Date,
                 Value = deal.DealDate
             };
             command.Parameters.Add(dealDateParam);
