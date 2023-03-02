@@ -17,11 +17,28 @@ namespace LesEgaisParser.Database
 
         public void TestConnectionToDb()
         {
+            const string sqlExpression = "select * from sys.objects where type_desc = 'SQL_STORED_PROCEDURE' and name = 'sp_GetDeals'";
+
             using (var connection = new SqlConnection(_connectionString))
             {
                 try
                 {
                     connection.Open();
+
+                    var command = new SqlCommand(sqlExpression, connection);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            Console.WriteLine("DB test successful!");
+                        }
+                        else
+                        {
+                            throw new ApplicationException();
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
