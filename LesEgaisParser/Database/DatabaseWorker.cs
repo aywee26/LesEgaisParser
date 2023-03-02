@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace LesEgaisParser.Database
 {
@@ -81,7 +82,7 @@ namespace LesEgaisParser.Database
             var sellerInnParam = new SqlParameter
             {
                 ParameterName = "@sellerInn",
-                Value = deal.SellerInn
+                Value = deal.SellerInn ?? SqlString.Null
             };
             command.Parameters.Add(sellerInnParam);
 
@@ -95,7 +96,7 @@ namespace LesEgaisParser.Database
             var buyerInnParam = new SqlParameter
             {
                 ParameterName = "@buyerInn",
-                Value = deal.BuyerInn
+                Value = deal.BuyerInn ?? SqlString.Null
             };
             command.Parameters.Add(buyerInnParam);
 
