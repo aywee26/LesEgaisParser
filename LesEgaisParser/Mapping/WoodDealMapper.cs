@@ -3,6 +3,7 @@ using LesEgaisParser.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace LesEgaisParser.Mapping
 {
@@ -14,12 +15,12 @@ namespace LesEgaisParser.Mapping
             var woodDeals = new List<WoodDeal>(dealsContent.Length);
             foreach (var deal in dealsContent)
             {
-                if (IsDealNumberCorrect(deal.dealNumber)
-                    && IsNameCorrect(deal.sellerName)
+                if (IsNameCorrect(deal.sellerName)
                     && IsNameCorrect(deal.buyerName)
                     && IsINNCorrect(deal.sellerInn)
                     && IsINNCorrect(deal.buyerInn)
-                    && IsDateCorrect(deal.dealDate))
+                    && IsDateCorrect(deal.dealDate)
+                    && IsDealNumberCorrect(deal.dealNumber, deal.buyerInn, deal.sellerInn))
                 {
                     var woodDeal = new WoodDeal()
                     {
@@ -56,9 +57,50 @@ namespace LesEgaisParser.Mapping
             return IsINNControlSumCorrect(inn);
         }
 
-        private bool IsDealNumberCorrect(string dealNumber)
+        private bool IsDealNumberCorrect(string dealNumber, string buyerInn, string sellerInn)
         {
-            return (!string.IsNullOrWhiteSpace(dealNumber)) && (dealNumber.Length == 28) && (dealNumber.All(char.IsDigit));
+            if (string.IsNullOrEmpty(dealNumber))
+                return false;
+
+            if (dealNumber.Length != 28)
+                return false;
+
+            if (!dealNumber.All(char.IsDigit))
+                return false;
+
+            // -----
+
+            var builder = new StringBuilder();
+
+            if (buyerInn.Length == 0)
+            {
+                builder.Append("000000000000");
+            }
+            else if (buyerInn.Length == 10)
+            {
+                builder.Append("00");
+                builder.Append(buyerInn);
+            }
+            else
+            {
+                builder.Append(buyerInn);
+            }
+
+            if (sellerInn.Length == 0)
+            {
+                builder.Append("000000000000");
+            }
+            else if (sellerInn.Length == 10)
+            {
+                builder.Append("00");
+                builder.Append(sellerInn);
+            }
+            else
+            {
+                builder.Append(sellerInn);
+            }
+
+            return (dealNumber.Substring(4) == builder.ToString());
         }
 
         private bool IsNameCorrect(string name)
