@@ -56,7 +56,7 @@ namespace LesEgaisParser.Database
                         command.ExecuteNonQuery();
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     throw;
                 }                
