@@ -17,7 +17,7 @@ namespace LesEgaisParser.Database
 
         public void TestConnectionToDb()
         {
-            const string sqlExpression = "select * from sys.objects where type_desc = 'SQL_STORED_PROCEDURE' and name = 'sp_GetDeals'";
+            const string sqlExpression = "select * from WoodDeals";
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -26,19 +26,7 @@ namespace LesEgaisParser.Database
                     connection.Open();
 
                     var command = new SqlCommand(sqlExpression, connection);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            Console.WriteLine("DB test successful!");
-                        }
-                        else
-                        {
-                            throw new ApplicationException();
-                        }
-
-                    }
+                    command.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
@@ -46,38 +34,6 @@ namespace LesEgaisParser.Database
                     Console.WriteLine(ex.Message);
                     throw;
                 }
-            }
-        }
-
-        public void OutputWoodDealsToConsole()
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                const string sqlExpression = "sp_GetDeals";
-                var command = new SqlCommand(sqlExpression, connection);
-                command.CommandType = CommandType.StoredProcedure;
-
-                using (var reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            string dealNumber = reader.GetString(0);
-                            string sellerName = reader.GetString(1);
-                            string sellerInn = reader.GetString(2);
-                            string buyerName = reader.GetString(3);
-                            string buyerInn = reader.GetString(4);
-                            DateTime dealDate = reader.GetDateTime(5);
-                            decimal woodVolumeBuyer = reader.GetDecimal(6);
-                            decimal woodVolumeSeller = reader.GetDecimal(7);
-
-                            Console.WriteLine($"{dealNumber}\t{sellerName}\t{sellerInn}\t{buyerName}\t{buyerInn}\t{dealDate}\t{woodVolumeBuyer}\t{woodVolumeSeller}");
-                        }
-                    }
-                }
-                
             }
         }
 
