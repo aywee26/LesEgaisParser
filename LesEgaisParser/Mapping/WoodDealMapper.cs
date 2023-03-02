@@ -17,8 +17,8 @@ namespace LesEgaisParser.Mapping
                 if (IsDealNumberCorrect(deal.dealNumber)
                     && IsNameCorrect(deal.sellerName)
                     && IsNameCorrect(deal.buyerName)
-                    && (deal.sellerInn == string.Empty || IsINNCorrect(deal.sellerInn))
-                    && (deal.buyerInn == string.Empty || IsINNCorrect(deal.buyerInn))
+                    && IsINNCorrect(deal.sellerInn)
+                    && IsINNCorrect(deal.buyerInn)
                     && IsDateCorrect(deal.dealDate))
                 {
                     var woodDeal = new WoodDeal()
@@ -46,6 +46,11 @@ namespace LesEgaisParser.Mapping
             if (inn == null)
             {
                 return false;
+            }
+
+            if (inn == string.Empty)
+            {
+                return true;
             }
 
             return IsINNControlSumCorrect(inn);
