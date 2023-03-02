@@ -3,7 +3,6 @@ using LesEgaisParser.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace LesEgaisParser.Mapping
 {
@@ -19,7 +18,8 @@ namespace LesEgaisParser.Mapping
                     && IsNameCorrect(deal.sellerName)
                     && IsNameCorrect(deal.buyerName)
                     && (deal.sellerInn == string.Empty || IsINNCorrect(deal.sellerInn))
-                    && (deal.buyerInn == string.Empty || IsINNCorrect(deal.buyerInn)))
+                    && (deal.buyerInn == string.Empty || IsINNCorrect(deal.buyerInn))
+                    && IsDateCorrect(deal.dealDate))
                 {
                     var woodDeal = new WoodDeal()
                     {
@@ -28,7 +28,7 @@ namespace LesEgaisParser.Mapping
                         SellerInn = deal.sellerInn,
                         BuyerName = deal.buyerName,
                         BuyerInn = deal.buyerInn,
-                        DealDate = deal.dealDate ?? DateTime.MinValue,
+                        DealDate = (DateTime)deal.dealDate,
                         WoodVolumeBuyer = deal.woodVolumeBuyer,
                         WoodVolumeSeller = deal.woodVolumeSeller
                     };
@@ -99,6 +99,22 @@ namespace LesEgaisParser.Mapping
             }
 
             return false;
+        }
+
+        private bool IsDateCorrect(DateTime? date)
+        {
+            if (date == null)
+            {
+                return false;
+            }
+
+            var sqlLowerLimit = new DateTime(year: 1753, month: 01, day: 01);
+            if (date < sqlLowerLimit)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
