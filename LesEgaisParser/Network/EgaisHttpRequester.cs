@@ -76,10 +76,10 @@ namespace LesEgaisParser
                 {
                     Console.WriteLine("POST request went wrong!");
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("Delay between requests increased!");
-
+                    
                     _failedRequests++;
-                    _requestDelay += new TimeSpan((int)Math.Pow(2, _failedRequests));
+                    _requestDelay += TimeSpan.FromSeconds((int)Math.Pow(2, _failedRequests));
+                    Console.WriteLine($"Delay between requests increased to {_requestDelay.TotalSeconds}!");
                 }
             }
 
