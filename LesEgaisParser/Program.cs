@@ -21,7 +21,7 @@ namespace LesEgaisParser
             dbWorker.TestConnectionToDb();
 
             Console.WriteLine("Starting HttpClient...");
-            var httpClient = new HttpClientAdapter(numbersOfDeals);
+            var httpClient = new HttpClientAdapter(numbersOfDeals, requestDelay);
 
             Console.WriteLine("Requesting number of deals to process...");
             var dealsTotal = httpClient.RequestTotalNumberOfDeals();
@@ -44,8 +44,6 @@ namespace LesEgaisParser
                 {
                     Console.WriteLine("Nothing to deserialize!");
                     Console.WriteLine("Page skipped!");
-                    Console.WriteLine("Delay between requests increased!\n");
-                    requestDelay.Add(TimeSpan.FromSeconds(5));
                     skippedPages.Add(i);
                     continue;
                 }
@@ -57,12 +55,10 @@ namespace LesEgaisParser
                 dbWorker.UpsertWoodDeals(deserializedContent);
 
                 Console.WriteLine("Success!");
-                Console.WriteLine("Current delay between requests: " + requestDelay + Environment.NewLine);
             }
 
             Console.WriteLine("Parsing is done!");
             Console.WriteLine("Skipped pages: " + string.Join(", ", skippedPages));
-            Console.WriteLine("Delay between requests in seconds: " + requestDelay.TotalSeconds);
             Console.ReadLine();
         }
     }

@@ -3,6 +3,7 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 
 namespace LesEgaisParser
 {
@@ -11,14 +12,17 @@ namespace LesEgaisParser
         private static readonly HttpClient _httpClient = new HttpClient();
         private const string _requestUrl = @"https://www.lesegais.ru/open-area/graphql";
         private readonly int _numberOfDealsPerRequest;
+        private TimeSpan _requestDelay;
+        private int _failedRequests = 0;
         
-        public HttpClientAdapter(int numberOfDealsPerRequest)
+        public HttpClientAdapter(int numberOfDealsPerRequest, TimeSpan requestDelay)
         {
             _httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
             _httpClient.DefaultRequestHeaders.Add("Referer", @"https://www.lesegais.ru/open-area/deal");
             _httpClient.DefaultRequestHeaders.Add("User-Agent", ".NET Framework Application");
 
             _numberOfDealsPerRequest = numberOfDealsPerRequest;
+            _requestDelay = requestDelay;
         }
 
         public int RequestTotalNumberOfDeals()
@@ -51,25 +55,35 @@ namespace LesEgaisParser
 
         private string PerformPostRequest(string requestUrl, string bodyString)
         {
-            try
-            {
-                using (var body = new StringContent(bodyString, Encoding.UTF8, "application/json"))
-                {
-                    using (var response = _httpClient.PostAsync(requestUrl, body).GetAwaiter().GetResult())
-                    {
-                        response.EnsureSuccessStatusCode();
+            int attempts = 3;
 
-                        var jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                        return jsonResponse;
+            for (int i = 0; i < attempts; i++)
+            {
+                try
+                {
+                    Thread.Sleep(_requestDelay);
+
+                    using (var body = new StringContent(bodyString, Encoding.UTF8, "application/json"))
+                    {
+                        using (var response = _httpClient.PostAsync(requestUrl, body).GetAwaiter().GetResult())
+                        {
+                            response.EnsureSuccessStatusCode();
+                            return response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("POST request went wrong!");
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Delay between requests increased!");
+
+                    _failedRequests++;
+                    _requestDelay += new TimeSpan((int)Math.Pow(2, _failedRequests));
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("POST request went wrong!");
-                Console.WriteLine(ex.Message);
-                return null;
-            }
+
+            return null;
         }
 
         private string GetBodyForSearchReportWoodDeal(int size, int page)

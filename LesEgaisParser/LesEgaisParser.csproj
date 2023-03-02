@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DatabaseWorker.cs" />
-    <Compile Include="HttpClientAdapter.cs" />
+    <Compile Include="Network\HttpClientAdapter.cs" />
     <Compile Include="Mapping\WoodDealMapper.cs" />
     <Compile Include="Models\WoodDeal.cs" />
     <Compile Include="Program.cs" />
@@ -85,8 +85,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Network\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
